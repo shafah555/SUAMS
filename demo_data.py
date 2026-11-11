@@ -8,16 +8,16 @@ USERS = {
 }
 
 STUDENTS = [
-    {"id":"S-1001","name":"Ayesha Rahman","email":"ayesha@example.com","department":"CSE","previous_result":"GPA 5.00"},
-    {"id":"S-1002","name":"Tanvir Hasan","email":"tanvir@example.com","department":"EEE","previous_result":"GPA 4.80"},
-    {"id":"S-1003","name":"Nusrat Jahan","email":"nusrat@example.com","department":"CSE","previous_result":"GPA 4.90"},
-    {"id":"S-1004","name":"Sabbir Hossain","email":"sabbir@example.com","department":"CE","previous_result":"GPA 4.60"},
-    {"id":"S-1005","name":"Mim Akter","email":"mim@example.com","department":"ME","previous_result":"GPA 4.75"},
-    {"id":"S-1006","name":"Rafi Islam","email":"rafi@example.com","department":"CSE","previous_result":"GPA 4.70"},
-    {"id":"S-1007","name":"Sumaiya Noor","email":"sumaiya@example.com","department":"EEE","previous_result":"GPA 4.95"},
-    {"id":"S-1008","name":"Arif Chowdhury","email":"arif@example.com","department":"CSE","previous_result":"GPA 4.55"},
-    {"id":"S-1009","name":"Jannat Sultana","email":"jannat@example.com","department":"CE","previous_result":"GPA 4.85"},
-    {"id":"S-1010","name":"Mahin Kabir","email":"mahin@example.com","department":"ME","previous_result":"GPA 4.65"},
+    {"id":"S-1001","name":"Ayesha Rahman","email":"ayesha@example.com","department":"CSE","previous_result":"GPA 5.00","is_registered":True,"has_unpaid_dues":False},
+    {"id":"S-1002","name":"Tanvir Hasan","email":"tanvir@example.com","department":"EEE","previous_result":"GPA 4.80","is_registered":True,"has_unpaid_dues":False},
+    {"id":"S-1003","name":"Nusrat Jahan","email":"nusrat@example.com","department":"CSE","previous_result":"GPA 4.90","is_registered":True,"has_unpaid_dues":False},
+    {"id":"S-1004","name":"Sabbir Hossain","email":"sabbir@example.com","department":"CE","previous_result":"GPA 4.60","is_registered":True,"has_unpaid_dues":False},
+    {"id":"S-1005","name":"Mim Akter","email":"mim@example.com","department":"ME","previous_result":"GPA 4.75","is_registered":True,"has_unpaid_dues":False},
+    {"id":"S-1006","name":"Rafi Islam","email":"rafi@example.com","department":"CSE","previous_result":"GPA 4.70","is_registered":True,"has_unpaid_dues":False},
+    {"id":"S-1007","name":"Sumaiya Noor","email":"sumaiya@example.com","department":"EEE","previous_result":"GPA 4.95","is_registered":True,"has_unpaid_dues":False},
+    {"id":"S-1008","name":"Arif Chowdhury","email":"arif@example.com","department":"CSE","previous_result":"GPA 4.55","is_registered":True,"has_unpaid_dues":False},
+    {"id":"S-1009","name":"Jannat Sultana","email":"jannat@example.com","department":"CE","previous_result":"GPA 4.85","is_registered":True,"has_unpaid_dues":False},
+    {"id":"S-1010","name":"Mahin Kabir","email":"mahin@example.com","department":"ME","previous_result":"GPA 4.65","is_registered":True,"has_unpaid_dues":False},
 ]
 
 TEACHERS = [
@@ -39,6 +39,7 @@ COURSES = [
     {"code":"MAT101","name":"Calculus and Linear Algebra","credit":3,"teacher":"Dr. Farhan Ahmed"},
 ]
 SEMESTERS = ["Year 1 - Semester 1", "Year 1 - Semester 2", "Year 2 - Semester 1"]
+MAX_COURSE_CAPACITY = 60
 ADMISSIONS = [
     {"application_id":"A-001","name":"Rumana Sarker","student_id":"S-1011","email":"rumana@example.com","department":"CSE","previous_result":"GPA 4.90","status":"Pending"},
     {"application_id":"A-002","name":"Hasib Rahman","student_id":"S-1012","email":"hasib@example.com","department":"EEE","previous_result":"GPA 4.70","status":"Pending"},

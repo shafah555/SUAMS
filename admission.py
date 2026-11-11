@@ -14,7 +14,7 @@ class AdmissionPage(TablePage):
         if i is not None:
             row=self.rows[i]; row["status"]="Approved"
             if not any(s["id"]==row["student_id"] for s in STUDENTS):
-                STUDENTS.append({"id":row["student_id"],"name":row["name"],"email":row["email"],"department":row["department"],"previous_result":row["previous_result"]})
+                STUDENTS.append({"id":row["student_id"],"name":row["name"],"email":row["email"],"department":row["department"],"previous_result":row["previous_result"],"is_registered":True,"has_unpaid_dues":False})
             self.refresh(); messagebox.showinfo("Admission","Application approved and student added.")
     def reject(self):
         i=self.selected()

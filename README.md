@@ -6,11 +6,11 @@ A beginner-friendly Python 3 + Tkinter desktop project for a Software Engineerin
 
 - Four demo roles with role-specific navigation: Student, Teacher, Administrator, Examination Controller.
 - Admission application review and approval/rejection.
-- Course registration with duplicate checks and an 18-credit limit.
+- Course registration with enrolled-student and unpaid-dues checks, a 60-student course capacity, duplicate prevention, and an 18-credit limit.
 - Semester enrollment with duplicate-enrollment prevention.
 - Examination form submission and controller approval.
 - Automatic sequential examination routine generation with unique rooms and time slots.
-- Continuous assessment total, grade, GPA and pass/fail calculation.
+- Continuous assessment mark validation, total, grade, GPA and pass/fail calculation.
 - Teacher-student advising records and comments.
 - Observer-pattern academic notifications.
 - Student performance table and optional Matplotlib bar chart.
@@ -51,7 +51,7 @@ The student demo account uses student ID `S-1001`.
 ## Run tests
 
 ```bash
-python -m unittest -v
+python -m unittest discover -v
 ```
 
 The test suite covers course registration, GPA/grade calculation, the 18-credit limit, semester enrollment integration, examination-form eligibility, black-box cases, and result-processing decisions.
@@ -72,7 +72,7 @@ The application separates login, dashboard, admission, course registration, seme
 
 ### Software Quality Assurance (SQA)
 
-- Input validation: required fields, numeric marks, mark ranges, duplicate courses, and credit limits are checked.
+- Input validation: required fields, numeric marks, assessment-component ranges, duplicate courses, course capacity, student registration status, payment dues, and credit limits are checked.
 - Error handling: invalid actions show clear error messages.
 - Code review: review each feature branch before merging.
 - Coding standards: descriptive names, small functions, and consistent formatting.
@@ -82,35 +82,26 @@ The application separates login, dashboard, admission, course registration, seme
 
 - Unit tests check individual business rules such as grade calculation and course registration.
 - Integration tests check course registration with semester enrollment and examination eligibility.
-- Black-box tests check expected outcomes for a 19-credit selection and a valid exam form.
-- White-box testing: `calculate_result()` has multiple decision points for required fields, mark ranges, and pass/fail status. Basis-path testing identifies independent paths through these decisions and creates test inputs to exercise each path.
+- Black-box tests cover the last available course seat, a full course, valid and invalid marks, and examination-form eligibility. The example course-capacity limit is 60 students. Generic marks default to a 0–100 inclusive range; the current weighted assessment fields also enforce their configured component maxima (10, 10, 10, 30, and 40).
+- White-box basis-path tests exercise the five registration outcomes: unregistered student, unpaid dues, full course, duplicate course, and successful registration.
+- These values and rules are illustrative demo assumptions and should be replaced with the university's confirmed policies.
 
 ## Git and GitHub workflow
 
-Use `main` for the stable version. Develop each module on a separate feature branch, open a Pull Request, review the code, merge approved work, and tag a release.
+The [contribution guide](CONTRIBUTING.md) defines the team workflow for feature branches, peer review, merging, and releases. In brief:
 
 ```bash
-git init
-git add .
-git commit -m "Initial SUAMS project"
-git branch -M main
-git remote add origin https://github.com/USERNAME/SUAMS.git
-git push -u origin main
-
-git checkout -b feature/course-registration
-# make changes
-git add .
-git commit -m "Add course registration"
+git switch main
+git pull --ff-only origin main
+git switch -c feature/course-registration
+# Make and test changes, then commit them.
 git push -u origin feature/course-registration
-# Open a Pull Request on GitHub, review, then merge into main.
-
-git checkout main
-git pull origin main
-git tag -a v1.0.0 -m "SUAMS version 1.0.0"
-git push origin v1.0.0
+# Open a Pull Request into main and request review from another developer.
 ```
 
-Replace `USERNAME` with your GitHub username.
+The `.github/workflows/tests.yml` workflow runs compilation and unit/integration tests for Python 3.10–3.14 on pull requests into `main` and pushes to `main`. The pull request template records task links, changes, and test evidence; `.github/release.yml` groups generated release notes.
+
+Protecting `main` is a repository setting, not something a Git commit can enforce. A GitHub administrator must configure branch rules to require a pull request, at least one approval, and all five `Tests` matrix checks (`Python 3.10` through `Python 3.14`), and block force pushes and branch deletion. See [CONTRIBUTING.md](CONTRIBUTING.md) for merge, integration, and release steps.
 
 ## Development tools
 
@@ -138,7 +129,13 @@ SUAMS/
 ├── demo_data.py
 ├── test_suams.py
 ├── requirements.txt
-└── README.md
+├── README.md
+├── CONTRIBUTING.md
+└── .github/
+    ├── PULL_REQUEST_TEMPLATE.md
+    ├── release.yml
+    └── workflows/
+        └── tests.yml
 ```
 
 ## Scope and classroom-demo notes

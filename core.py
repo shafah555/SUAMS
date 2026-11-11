@@ -1,4 +1,5 @@
 """Application services and business rules. All data is stored in memory."""
+from math import isfinite
 from demo_data import *
 
 GRADE_SCALE = [
@@ -6,6 +7,22 @@ GRADE_SCALE = [
     (65, "B+", 3.25), (60, "B", 3.00), (55, "B-", 2.75),
     (50, "C+", 2.50), (45, "C", 2.25), (40, "D", 2.00), (0, "F", 0.00)
 ]
+ASSESSMENT_MAXIMUMS = {
+    "assignment": 10,
+    "class_test": 10,
+    "attendance": 10,
+    "midterm": 30,
+    "final": 40,
+}
+
+def validate_mark(mark, maximum=100):
+    try:
+        value = float(mark)
+    except (TypeError, ValueError, OverflowError):
+        raise ValueError("Mark must be a number.")
+    if not isfinite(value) or not 0 <= value <= maximum:
+        raise ValueError(f"Mark must be between 0 and {maximum}.")
+    return value
 
 def authenticate(username, password):
     user = USERS.get(username.strip().lower())
@@ -14,8 +31,11 @@ def authenticate(username, password):
     return None
 
 def grade_for(total):
-    total = float(total)
-    if not 0 <= total <= 100:
+    try:
+        total = float(total)
+    except (TypeError, ValueError, OverflowError):
+        raise ValueError("Total marks must be between 0 and 100.")
+    if not isfinite(total) or not 0 <= total <= 100:
         raise ValueError("Total marks must be between 0 and 100.")
     for minimum, grade, point in GRADE_SCALE:
         if total >= minimum:
@@ -27,11 +47,7 @@ def calculate_result(marks):
     required = ["assignment", "class_test", "attendance", "midterm", "final"]
     if any(k not in marks for k in required):
         raise ValueError("All assessment components are required.")
-    values = [float(marks[k]) for k in required]
-    if any(v < 0 for v in values):
-        raise ValueError("Marks cannot be negative.")
-    if values[0] > 10 or values[1] > 10 or values[2] > 10 or values[3] > 30 or values[4] > 40:
-        raise ValueError("Maximum marks: assignment 10, class test 10, attendance 10, midterm 30, final 40.")
+    values = [validate_mark(marks[k], ASSESSMENT_MAXIMUMS[k]) for k in required]
     total = sum(values)
     grade, point = grade_for(total)
     if total < 40:
@@ -41,6 +57,13 @@ def calculate_result(marks):
     return {"total": round(total, 2), "grade": grade, "gpa": point, "status": status}
 
 def register_courses(student_id, course_codes):
+    student = next((s for s in STUDENTS if s["id"] == student_id), None)
+    if student is None:
+        raise ValueError("Student record was not found.")
+    if not student.get("is_registered", False):
+        raise ValueError("Student is not registered.")
+    if student.get("has_unpaid_dues", False):
+        raise ValueError("Payment dues must be cleared.")
     if not course_codes:
         raise ValueError("Select at least one course.")
     if len(course_codes) != len(set(course_codes)):
@@ -48,10 +71,21 @@ def register_courses(student_id, course_codes):
     known = {c["code"]: c for c in COURSES}
     if any(code not in known for code in course_codes):
         raise ValueError("Unknown course selected.")
-    credits = sum(known[c]["credit"] for c in course_codes)
+    current_courses = REGISTRATIONS.get(student_id, [])
+    for code in course_codes:
+        registered_elsewhere = sum(
+            code in registered
+            for other_student_id, registered in REGISTRATIONS.items()
+            if other_student_id != student_id
+        )
+        if registered_elsewhere >= MAX_COURSE_CAPACITY:
+            raise ValueError(f"Course is full. Maximum capacity is {MAX_COURSE_CAPACITY} students.")
+    if any(code in current_courses for code in course_codes):
+        raise ValueError("Already registered for this course.")
+    credits = sum(known[code]["credit"] for code in current_courses + list(course_codes))
     if credits > 18:
         raise ValueError("Credit limit exceeded. Maximum allowed is 18.")
-    REGISTRATIONS[student_id] = list(course_codes)
+    REGISTRATIONS[student_id] = current_courses + list(course_codes)
     return credits
 
 def enroll_semester(student_id, semester):
