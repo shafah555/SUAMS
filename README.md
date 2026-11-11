@@ -99,7 +99,7 @@ git push -u origin feature/course-registration
 # Open a Pull Request into main and request review from another developer.
 ```
 
-The `.github/workflows/tests.yml` workflow runs compilation and unit/integration tests for Python 3.10–3.14 on pull requests into `main` and pushes to `main`. The pull request template records task links, changes, and test evidence; `.github/release.yml` groups generated release notes.
+The `.github/workflows/tests.yml` workflow runs compilation and unit/integration tests for Python 3.10–3.14 on pull requests into `main`, pushes to `main`, and manual dispatches. The pull request template records task links, changes, and test evidence. Pushing a version tag (for example `v1.0.0`) starts `.github/workflows/release.yml`, which repeats the test matrix and publishes a GitHub Release only after every job passes. Release notes are grouped by `.github/release.yml` and include the known demo limitations and database migration status.
 
 Protecting `main` is a repository setting, not something a Git commit can enforce. A GitHub administrator must configure branch rules to require a pull request, at least one approval, and all five `Tests` matrix checks (`Python 3.10` through `Python 3.14`), and block force pushes and branch deletion. See [CONTRIBUTING.md](CONTRIBUTING.md) for merge, integration, and release steps.
 
@@ -135,6 +135,7 @@ SUAMS/
     ├── PULL_REQUEST_TEMPLATE.md
     ├── release.yml
     └── workflows/
+        ├── release.yml
         └── tests.yml
 ```
 

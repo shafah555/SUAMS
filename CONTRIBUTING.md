@@ -51,7 +51,7 @@ git tag -a v1.0.0 -m "SUAMS v1.0.0"
 git push origin v1.0.0
 ```
 
-Then create a GitHub Release for that tag. Review the generated notes and make sure they cover:
+Pushing the tag starts the `Release` workflow. It reruns compilation and the complete test suite on Python 3.10 through 3.14; only if every matrix job succeeds does it publish a GitHub Release with generated notes. The notes include the current known limitations and migration status. Review the release after publication and ensure the notes cover:
 
 - Included features and fixes.
 - Known limitations and any migration or configuration steps.
